@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Sentiment Analyzer Pro</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:#4f46e5;
+    overflow-x:hidden;
+    color:white;
+}
+
+/*
+  The old approach animated `background-position` on a 400% gradient directly
+  on <body>. That property can't be handled by the compositor alone, so the
+  browser has to repaint the entire background every animation frame - and
+  every backdrop-filter:blur() panel sitting on top then has to re-sample
+  that freshly repainted content too. That combo is the main source of lag.
+
+  Fix: move the gradient onto its own fixed, oversized pseudo-element and
+  animate it with `transform` instead of `background-position`. Transform
+  animations run on the compositor thread (GPU), so there's no repaint per
+  frame, and the blur panels above have a much cheaper, mostly-static layer
+  to sample from.
+*/
+body::before{
+    content:"";
+    position:fixed;
+    top:-25%;
+    left:-25%;
+    width:150%;
+    height:150%;
+    background:linear-gradient(135deg,#4f46e5,#0ea5e9,#14b8a6);
+    background-size:200% 200%;
+    will-change:transform;
+    animation:bgMove 18s ease-in-out infinite;
+    z-index:-2;
+}
+
+@keyframes bgMove{
+    0%{transform:translate3d(0,0,0);}
+    50%{transform:translate3d(-6%,4%,0);}
+    100%{transform:translate3d(0,0,0);}
+}
+
+.background{
+    position:fixed;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    z-index:-1;
+    contain:strict;
+}
+
+.circle{
+    position:absolute;
+    border-radius:50%;
+    backdrop-filter:blur(14px);
+    opacity:.2;
+    will-change:transform;
+    transform:translateZ(0);
+}
+
+@media(prefers-reduced-motion:reduce){
+    body::before,
+    .circle{
+        animation:none !important;
+    }
+}
+
+.c1{
+    width:300px;
+    height:300px;
+    background:white;
+    top:-80px;
+    left:-80px;
+    animation:float1 8s infinite alternate;
+}
+
+.c2{
+    width:220px;
+    height:220px;
+    background:#00ffff;
+    right:5%;
+    top:15%;
+    animation:float2 9s infinite alternate;
+}
+
+.c3{
+    width:250px;
+    height:250px;
+    background:#ff00ff;
+    bottom:-100px;
+    left:40%;
+    animation:float3 10s infinite alternate;
+}
+
+@keyframes float1{
+    from{transform:translateY(0);}
+    to{transform:translateY(60px);}
+}
+
+@keyframes float2{
+    from{transform:translateX(0);}
+    to{transform:translateX(-60px);}
+}
+
+@keyframes float3{
+    from{transform:translateY(0);}
+    to{transform:translateY(-70px);}
+}
+
+header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:30px 8%;
+}
+
+header h1{
+    font-size:38px;
+    font-weight:700;
+}
+
+#darkBtn{
+    border:none;
+    padding:12px 20px;
+    border-radius:12px;
+    cursor:pointer;
+    background:white;
+    color:#222;
+    font-weight:600;
+    transition:.3s;
+}
+
+#darkBtn:hover{
+    transform:scale(1.05);
+}
+
+.container{
+    width:90%;
+    max-width:1200px;
+    margin:auto;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(330px,1fr));
+    gap:25px;
+    padding-bottom:40px;
+}
+
+.glass{
+    background:rgba(255,255,255,.15);
+    border:1px solid rgba(255,255,255,.2);
+    backdrop-filter:blur(10px);
+    border-radius:20px;
+    padding:25px;
+    box-shadow:0 10px 35px rgba(0,0,0,.2);
+    transition:transform .35s;
+    transform:translateZ(0);
+    contain:layout style paint;
+}
+
+.glass:hover{
+    transform:translateY(-8px);
+}
+
+textarea{
+    width:100%;
+    height:180px;
+    margin-top:20px;
+    resize:none;
+    border:none;
+    outline:none;
+    border-radius:15px;
+    padding:18px;
+    font-size:17px;
+}
+
+button{
+    margin-top:20px;
+    padding:14px 25px;
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+    font-size:16px;
+    font-weight:600;
+    background:#22c55e;
+    color:white;
+    transition:.3s;
+}
+
+button:hover{
+    transform:translateY(-3px);
+    background:#16a34a;
+}
+
+button:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+    transform:none;
+}
+
+.emotion-card{
+    text-align:center;
+}
+
+.emotion-card h1{
+    font-size:70px;
+}
+
+.emotion-card h2{
+    margin-top:10px;
+    font-size:34px;
+}
+
+.progress{
+    width:100%;
+    height:14px;
+    background:rgba(255,255,255,.25);
+    border-radius:20px;
+    overflow:hidden;
+    margin-top:20px;
+}
+
+.progress-fill{
+    height:100%;
+    width:0%;
+    border-radius:20px;
+    background:#22c55e;
+    transition:1s;
+}
+
+.red{
+    background:#ef4444;
+}
+
+.blue{
+    background:#3b82f6;
+}
+
+.top3-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:14px;
+    font-size:17px;
+}
+
+.top3-row .rank{
+    opacity:.7;
+    margin-right:10px;
+}
+
+.top3-row .name{
+    flex:1;
+    text-align:left;
+}
+
+.dominant-list{
+    margin-top:10px;
+}
+
+.dominant-row{
+    margin-top:16px;
+}
+
+.dominant-row-head{
+    display:flex;
+    justify-content:space-between;
+    font-size:16px;
+    margin-bottom:6px;
+}
+
+.dominant-row-head .name{
+    font-weight:600;
+}
+
+.dominant-bar{
+    width:100%;
+    height:12px;
+    background:rgba(255,255,255,.25);
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.dominant-bar-fill{
+    height:100%;
+    border-radius:20px;
+    background:linear-gradient(90deg,#22c55e,#3b82f6);
+    transition:1s;
+    width:0%;
+}
+
+.dominant-sum-note{
+    margin-top:16px;
+    font-size:13px;
+    opacity:.75;
+}
+
+.polarity-overall{
+    text-align:center;
+    font-size:22px;
+    font-weight:600;
+    margin-bottom:18px;
+}
+
+.polarity-row{
+    margin-top:14px;
+}
+
+.polarity-row-head{
+    display:flex;
+    justify-content:space-between;
+    font-size:16px;
+    margin-bottom:6px;
+}
+
+.polarity-bar{
+    width:100%;
+    height:14px;
+    background:rgba(255,255,255,.25);
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.polarity-bar-fill{
+    height:100%;
+    border-radius:20px;
+    transition:1s;
+    width:0%;
+}
+
+.polarity-positive .polarity-bar-fill{
+    background:#22c55e;
+}
+
+.polarity-negative .polarity-bar-fill{
+    background:#ef4444;
+}
+
+.polarity-neutral .polarity-bar-fill{
+    background:#94a3b8;
+}
+
+#keywords{
+    margin-top:20px;
+}
+
+#keywords span{
+    display:inline-block;
+    padding:10px 15px;
+    border-radius:30px;
+    margin:8px;
+    font-weight:600;
+    background:#3b82f6;
+}
+
+.replyBox{
+    margin-top:20px;
+    padding:18px;
+    border-radius:15px;
+    background:rgba(255,255,255,.15);
+    line-height:1.8;
+}
+
+#history{
+    margin-top:15px;
+    list-style:none;
+}
+
+#history li{
+    margin:12px 0;
+    padding:12px;
+    border-radius:12px;
+    background:rgba(255,255,255,.1);
+}
+
+#historyEmpty{
+    margin-top:15px;
+    opacity:.7;
+}
+
+.error-msg{
+    margin-top:12px;
+    color:#fecaca;
+    font-weight:600;
+}
+
+.warning-msg{
+    margin-top:12px;
+    color:#fde68a;
+    font-weight:600;
+}
+
+.placeholder-text{
+    opacity:.7;
+}
+
+.char-counter{
+    margin-top:10px;
+    opacity:0.8;
+    font-size:14px;
+}
+
+footer{
+    text-align:center;
+    padding:35px;
+    font-size:15px;
+    opacity:.8;
+}
+
+@media(max-width:768px){
+header{
+    flex-direction:column;
+    gap:15px;
+}
+header h1{
+    text-align:center;
+    font-size:30px;
+}
+.container{
+    grid-template-columns:1fr;
+}
+}
+    </style>
+</head>
+<body>
+
+<div class="background">
+    <div class="circle c1"></div>
+    <div class="circle c2"></div>
+    <div class="circle c3"></div>
+</div>
+
+<header>
+    <h1>🤖 AI Sentiment Analyzer</h1>
+    <button id="darkBtn">🌙 Dark Mode</button>
+</header>
+
+<div class="container">
+
+    <div class="glass">
+        <h2>Analyze Your Emotion</h2>
+        <textarea id="sentence" maxlength="500" placeholder="Type something like... I'm excited but nervous!"></textarea>
+        <p class="char-counter" id="charCounter">0/500 Characters</p>
+        <button id="analyzeBtn">Analyze</button>
+    </div>
+
+    <div class="glass result">
+        <h2>Result</h2>
+        <div class="emotion-card">
+            <h1 id="emoji">❓</h1>
+            <h2 id="emotion">No analysis yet</h2>
+            <p id="confidenceText">Confidence</p>
+            <div class="progress">
+                <div id="confidenceBar" class="progress-fill" style="width:0%;"></div>
+            </div>
+            <h3 id="confidencePercent">—</h3>
+        </div>
+    </div>
+
+    <div class="glass">
+        <h2>Overall Tone</h2>
+        <div id="polarityOverall" class="polarity-overall placeholder-text">No analysis yet.</div>
+        <div id="polarity"></div>
+    </div>
+
+    <div class="glass">
+        <h2>Dominant Feelings <span style="opacity:.7;font-size:14px;">(&gt;5%)</span></h2>
+        <div id="dominant" class="dominant-list">
+            <span class="placeholder-text">No analysis yet.</span>
+        </div>
+        <p class="dominant-sum-note" id="dominantSumNote"></p>
+    </div>
+
+    <div class="glass">
+        <h2>Detected Keywords</h2>
+        <div id="keywords">
+            <span class="placeholder-text">No text analyzed yet.</span>
+        </div>
+    </div>
+
+    <div class="glass">
+        <h2>AI Explanation</h2>
+        <p id="explanation" class="placeholder-text">
+            Type something above and click Analyze to see how the AI classified it.
+        </p>
+    </div>
+
+    <div class="glass">
+        <h2>Suggested Reply</h2>
+        <div class="replyBox">
+            <span id="replyText" class="placeholder-text">Your suggested reply will appear here.</span>
+        </div>
+    </div>
+
+    <div class="glass">
+        <h2>Recent History</h2>
+        <p id="historyEmpty">No analyses yet.</p>
+        <ul id="history"></ul>
+    </div>
+
+</div>
+
+<footer>
+    AI Sentiment Analyzer Pro • Built for Hackathon 🚀
+</footer>
+
+<script>
+const analyzeBtn = document.getElementById("analyzeBtn");
+const textInput = document.getElementById("sentence");
+const darkBtn = document.getElementById("darkBtn");
+const charCounter = document.getElementById("charCounter");
+
+const emoji = document.getElementById("emoji");
+const emotion = document.getElementById("emotion");
+const confidenceBar = document.getElementById("confidenceBar");
+const confidencePercent = document.getElementById("confidencePercent");
+const explanation = document.getElementById("explanation");
+const replyText = document.getElementById("replyText");
+const keywords = document.getElementById("keywords");
+const dominant = document.getElementById("dominant");
+const dominantSumNote = document.getElementById("dominantSumNote");
+const polarity = document.getElementById("polarity");
+const polarityOverall = document.getElementById("polarityOverall");
+
+const history = document.getElementById("history");
+const historyEmpty = document.getElementById("historyEmpty");
+
+analyzeBtn.addEventListener("click", analyzeSentiment);
+
+textInput.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        analyzeSentiment();
+    }
+});
+
+textInput.addEventListener("input", () => {
+    charCounter.innerHTML = textInput.value.length + "/500 Characters";
+});
+
+async function analyzeSentiment() {
+    const text = textInput.value.trim();
+    clearMessages();
+
+    if (text === "") {
+        showMessage("Please enter some text.", "error-msg");
+        return;
+    }
+
+    setLoading(true);
+
+    try {
+        const res = await fetch("/analyze", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ text })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            showMessage(data.error || "Something went wrong.", "error-msg");
+            return;
+        }
+
+        if (data.warning) {
+            showMessage(data.warning, "warning-msg");
+        }
+
+        updateUI(data);
+    } catch (err) {
+        showMessage("Could not reach the server. Please try again.", "error-msg");
+    } finally {
+        setLoading(false);
+    }
+}
+
+function setLoading(isLoading) {
+    analyzeBtn.disabled = isLoading;
+    analyzeBtn.textContent = isLoading ? "Analyzing..." : "Analyze";
+}
+
+function showMessage(message, className) {
+    const p = document.createElement("p");
+    p.className = className;
+    p.id = "statusMsg";
+    p.textContent = message;
+    textInput.parentNode.appendChild(p);
+}
+
+function clearMessages() {
+    const existing = document.getElementById("statusMsg");
+    if (existing) existing.remove();
+}
+
+function updateUI(data) {
+    emotion.innerHTML = data.sentiment;
+    emoji.innerHTML = data.emoji;
+    confidencePercent.innerHTML = data.confidence + "%";
+    confidenceBar.style.width = data.confidence + "%";
+
+    explanation.innerHTML = data.explanation;
+    explanation.classList.remove("placeholder-text");
+
+    replyText.innerHTML = data.reply;
+    replyText.classList.remove("placeholder-text");
+
+    // Overall tone: Positive / Negative / Neutral, rolled up from every
+    // emotion's normalized share, so these three also sum to 100%.
+    if (data.polarity) {
+        const p = data.polarity;
+        polarityOverall.classList.remove("placeholder-text");
+        polarityOverall.textContent = `${p.overall_emoji} ${p.overall}`;
+
+        const rows = [
+            { key: "positive", label: "Positive" },
+            { key: "negative", label: "Negative" },
+            { key: "neutral", label: "Neutral" }
+        ];
+
+        polarity.innerHTML = "";
+        rows.forEach(r => {
+            const score = p[r.key] || 0;
+            const row = document.createElement("div");
+            row.className = `polarity-row polarity-${r.key}`;
+            row.innerHTML = `
+                <div class="polarity-row-head">
+                    <span class="name">${r.label}</span>
+                    <span>${score}%</span>
+                </div>
+                <div class="polarity-bar">
+                    <div class="polarity-bar-fill" style="width:${score}%;"></div>
+                </div>
+            `;
+            polarity.appendChild(row);
+        });
+    }
+
+    // Dominant feelings: everything the backend already normalized to
+    // sum to 100% and filtered down to shares above the threshold.
+    dominant.innerHTML = "";
+    const threshold = data.dominance_threshold !== undefined ? data.dominance_threshold : 5;
+
+    if (Array.isArray(data.dominant_emotions) && data.dominant_emotions.length) {
+        let sum = 0;
+        data.dominant_emotions.forEach(item => {
+            sum += item.score;
+
+            const row = document.createElement("div");
+            row.className = "dominant-row";
+            row.innerHTML = `
+                <div class="dominant-row-head">
+                    <span class="name">${item.emoji || ""} ${item.emotion}</span>
+                    <span>${item.score}%</span>
+                </div>
+                <div class="dominant-bar">
+                    <div class="dominant-bar-fill" style="width:${item.score}%;"></div>
+                </div>
+            `;
+            dominant.appendChild(row);
+        });
+
+        dominantSumNote.textContent = `Showing feelings above ${threshold}% • all emotion scores together sum to 100%.`;
+    } else {
+        dominant.innerHTML = '<span class="placeholder-text">No data.</span>';
+        dominantSumNote.textContent = "";
+    }
+
+    keywords.innerHTML = "";
+    if (!data.keywords || data.keywords.length === 0) {
+        keywords.innerHTML = '<span class="placeholder-text">No keywords found.</span>';
+    } else {
+        data.keywords.forEach(word => {
+            const span = document.createElement("span");
+            span.textContent = word;
+            keywords.appendChild(span);
+        });
+    }
+
+    historyEmpty.style.display = "none";
+    const item = document.createElement("li");
+    item.textContent = data.emoji + " " + data.sentiment + " (" + data.confidence + "%)";
+    history.prepend(item);
+}
+
+let dark = false;
+
+darkBtn.addEventListener("click", () => {
+    dark = !dark;
+
+    if (dark) {
+        document.body.style.background = "#111827";
+        document.body.style.color = "white";
+        darkBtn.innerHTML = "☀️ Light Mode";
+    } else {
+        document.body.style.background = "linear-gradient(135deg,#4f46e5,#0ea5e9,#14b8a6)";
+        document.body.style.color = "white";
+        darkBtn.innerHTML = "🌙 Dark Mode";
+    }
+});
+
+window.onload = () => {
+    charCounter.innerHTML = "0/500 Characters";
+    document.querySelectorAll(".glass").forEach((card, index) => {
+        card.style.opacity = "0";
+        card.style.transform = "translateY(40px)";
+        setTimeout(() => {
+            card.style.transition = "0.7s";
+            card.style.opacity = "1";
+            card.style.transform = "translateY(0px)";
+        }, index * 150);
+    });
+};
+</script>
+</body>
+</html>
