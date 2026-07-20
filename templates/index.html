@@ -446,7 +446,6 @@ header h1{
 
 <header>
     <h1>🤖 AI Sentiment Analyzer</h1>
-    <button id="darkBtn">🌙 Dark Mode</button>
 </header>
 
 <div class="container">
@@ -696,21 +695,6 @@ function updateUI(data) {
     item.textContent = data.emoji + " " + data.sentiment + " (" + data.confidence + "%)";
     history.prepend(item);
 }
-
-let dark = false;
-
-darkBtn.addEventListener("click", () => {
-    dark = !dark;
-
-    if (dark) {
-        document.body.style.background = "#111827";
-        document.body.style.color = "white";
-        darkBtn.innerHTML = "☀️ Light Mode";
-    } else {
-        document.body.style.background = "linear-gradient(135deg,#4f46e5,#0ea5e9,#14b8a6)";
-        document.body.style.color = "white";
-        darkBtn.innerHTML = "🌙 Dark Mode";
-    }
 });
 
 window.onload = () => {
