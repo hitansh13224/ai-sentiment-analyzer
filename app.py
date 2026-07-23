@@ -61,6 +61,56 @@ POLARITY_MAP = {
     "Sympathetic": "neutral",
     "Anticipation": "neutral",
     "Determined": "positive",
+    "Amused": "positive",
+    "Optimistic": "positive",
+    "Nostalgic": "neutral",
+    "Empowered": "positive",
+    "Inspired": "positive",
+    "Peaceful": "positive",
+    "Playful": "positive",
+    "Affectionate": "positive",
+    "Admiring": "positive",
+    "Cheerful": "positive",
+    "Delighted": "positive",
+    "Ecstatic": "positive",
+    "Euphoric": "positive",
+    "Blissful": "positive",
+    "Triumphant": "positive",
+    "Vindicated": "positive",
+    "Reassured": "positive",
+    "Comforted": "positive",
+    "Secure": "positive",
+    "Fulfilled": "positive",
+    "Amazed": "positive",
+    "Awestruck": "positive",
+    "Fascinated": "positive",
+    "Intrigued": "neutral",
+    "Motivated": "positive",
+    "Adventurous": "positive",
+    "Bittersweet": "neutral",
+    "Melancholy": "negative",
+    "Heartbroken": "negative",
+    "Devastated": "negative",
+    "Betrayed": "negative",
+    "Resentful": "negative",
+    "Bitter": "negative",
+    "Irritated": "negative",
+    "Annoyed": "negative",
+    "Exasperated": "negative",
+    "Contemptuous": "negative",
+    "Repulsed": "negative",
+    "Horrified": "negative",
+    "Terrified": "negative",
+    "Panicked": "negative",
+    "Paranoid": "negative",
+    "Insecure": "negative",
+    "Vulnerable": "neutral",
+    "Helpless": "negative",
+    "Hopeless": "negative",
+    "Numb": "negative",
+    "Apathetic": "neutral",
+    "Confused": "neutral",
+    "Conflicted": "neutral",
 }
 
 POLARITY_EMOJI = {"positive": "🟢", "negative": "🔴", "neutral": "⚪"}
@@ -74,7 +124,17 @@ EMOTIONS = [
     "Curious", "Neutral",
     "Anxious", "Bored", "Calm", "Content", "Disappointed",
     "Enthusiastic", "Overwhelmed", "Proud", "Regretful", "Relieved",
-    "Satisfied", "Suspicious", "Sympathetic", "Anticipation", "Determined"
+    "Satisfied", "Suspicious", "Sympathetic", "Anticipation", "Determined",
+    "Amused", "Optimistic", "Nostalgic", "Empowered", "Inspired",
+    "Peaceful", "Playful", "Affectionate", "Admiring", "Cheerful",
+    "Delighted", "Ecstatic", "Euphoric", "Blissful", "Triumphant",
+    "Vindicated", "Reassured", "Comforted", "Secure", "Fulfilled",
+    "Amazed", "Awestruck", "Fascinated", "Intrigued", "Motivated",
+    "Adventurous", "Bittersweet", "Melancholy", "Heartbroken", "Devastated",
+    "Betrayed", "Resentful", "Bitter", "Irritated", "Annoyed",
+    "Exasperated", "Contemptuous", "Repulsed", "Horrified", "Terrified",
+    "Panicked", "Paranoid", "Insecure", "Vulnerable", "Helpless",
+    "Hopeless", "Numb", "Apathetic", "Confused", "Conflicted"
 ]
 
 EMOJI = {
@@ -88,7 +148,24 @@ EMOJI = {
     "Disappointed": "😥", "Enthusiastic": "🙌", "Overwhelmed": "😵",
     "Proud": "🏆", "Regretful": "😣", "Relieved": "😅", "Satisfied": "👍",
     "Suspicious": "🤨", "Sympathetic": "🤗", "Anticipation": "👀",
-    "Determined": "💪"
+    "Determined": "💪",
+    "Amused": "😄", "Optimistic": "🌤️", "Nostalgic": "🥹",
+    "Empowered": "⚡", "Inspired": "✨", "Peaceful": "🕊️",
+    "Playful": "😜", "Affectionate": "🥰", "Admiring": "😍",
+    "Cheerful": "😃", "Delighted": "😁", "Ecstatic": "🥳",
+    "Euphoric": "🚀", "Blissful": "🧘", "Triumphant": "🏅",
+    "Vindicated": "✅", "Reassured": "🤝", "Comforted": "🫂",
+    "Secure": "🔒", "Fulfilled": "🌈", "Amazed": "😮",
+    "Awestruck": "🌌", "Fascinated": "🔬", "Intrigued": "🧐",
+    "Motivated": "🔥", "Adventurous": "🧭", "Bittersweet": "🍂",
+    "Melancholy": "🌧️", "Heartbroken": "💔", "Devastated": "😭",
+    "Betrayed": "🗡️", "Resentful": "😠", "Bitter": "🍋",
+    "Irritated": "🫨", "Annoyed": "🙄", "Exasperated": "😩",
+    "Contemptuous": "😏", "Repulsed": "🤮", "Horrified": "😱",
+    "Terrified": "😫", "Panicked": "😵‍💫", "Paranoid": "👁️",
+    "Insecure": "🙁", "Vulnerable": "🫥", "Helpless": "🤷",
+    "Hopeless": "🌑", "Numb": "🫤", "Apathetic": "😶",
+    "Confused": "❓", "Conflicted": "⚖️"
 }
 
 REPLY = {
@@ -126,7 +203,57 @@ REPLY = {
     "Suspicious": "Trust your instincts, but stay open too.",
     "Sympathetic": "That's a kind way to feel.",
     "Anticipation": "Exciting things ahead! 👀",
-    "Determined": "Keep pushing, you've got this. 💪"
+    "Determined": "Keep pushing, you've got this. 💪",
+    "Amused": "Glad that brought a smile! 😄",
+    "Optimistic": "That outlook will take you far. 🌤️",
+    "Nostalgic": "Those memories matter. 🥹",
+    "Empowered": "Own that strength! ⚡",
+    "Inspired": "Let that spark carry you forward. ✨",
+    "Peaceful": "Hold onto that stillness. 🕊️",
+    "Playful": "Love that playful energy! 😜",
+    "Affectionate": "That warmth is beautiful. 🥰",
+    "Admiring": "Appreciation looks good on you. 😍",
+    "Cheerful": "Keep that sunshine going! 😃",
+    "Delighted": "So happy to hear that! 😁",
+    "Ecstatic": "What a rush, enjoy it! 🥳",
+    "Euphoric": "Ride that high! 🚀",
+    "Blissful": "Pure contentment, savor it. 🧘",
+    "Triumphant": "You earned this win! 🏅",
+    "Vindicated": "Good to be proven right. ✅",
+    "Reassured": "Glad that eased your mind. 🤝",
+    "Comforted": "That comfort is well-deserved. 🫂",
+    "Secure": "Feeling grounded is powerful. 🔒",
+    "Fulfilled": "That sense of purpose is everything. 🌈",
+    "Amazed": "That's genuinely amazing. 😮",
+    "Awestruck": "Some things really do take your breath away. 🌌",
+    "Fascinated": "Curiosity like that is a gift. 🔬",
+    "Intrigued": "Keep pulling on that thread. 🧐",
+    "Motivated": "Use that fire! 🔥",
+    "Adventurous": "Go chase that adventure! 🧭",
+    "Bittersweet": "Holding two feelings at once is only human. 🍂",
+    "Melancholy": "It's okay to sit with that feeling for a while. 🌧️",
+    "Heartbroken": "I'm really sorry you're hurting. 💙",
+    "Devastated": "Sending you strength right now. 💙",
+    "Betrayed": "That trust being broken really hurts.",
+    "Resentful": "Those feelings are valid, let them out.",
+    "Bitter": "Give yourself space to process that.",
+    "Irritated": "Take a breath, it'll pass.",
+    "Annoyed": "That's a fair thing to feel.",
+    "Exasperated": "You've been patient enough already.",
+    "Contemptuous": "Strong feelings there - trust them, but stay open.",
+    "Repulsed": "Understandably off-putting.",
+    "Horrified": "That sounds really unsettling.",
+    "Terrified": "You're safe right now, breathe with me.",
+    "Panicked": "Slow down, one breath at a time. 🌿",
+    "Paranoid": "Try to ground yourself in what's real right now.",
+    "Insecure": "You are enough, exactly as you are.",
+    "Vulnerable": "Thank you for being open about that.",
+    "Helpless": "You don't have to have all the answers right now.",
+    "Hopeless": "It won't always feel this heavy. 💙",
+    "Numb": "Be gentle with yourself right now.",
+    "Apathetic": "No pressure to feel more than you do.",
+    "Confused": "Let's untangle that together.",
+    "Conflicted": "Two truths can pull at once, that's okay."
 }
 
 FALLBACK_SCORES = {e: 0 for e in EMOTIONS}
@@ -153,8 +280,11 @@ def call_groq(text: str) -> dict:
         '  "keywords": ["word_or_phrase_from_text", ...]\n'
         "}\n"
         "Scores are integers 0-100 reflecting confidence that the text expresses "
-        "that emotion. Most emotions should score low or 0; only emotions genuinely "
-        "present should score high. If nothing stands out, Neutral should score high "
+        "that emotion. Be decisive, not evenly spread: the emotion(s) that are "
+        "genuinely present should score high (70-100), and everything else should "
+        "score very low (0-10). Do not hedge by giving many emotions similar "
+        "mid-range scores - a clear, dominant feeling is more useful than a flat "
+        "distribution. If nothing stands out, Neutral should score high "
         "and the rest low. keywords should be short words or phrases copied from the "
         "input text that most influenced your scoring (max 8 items)."
     )
@@ -204,6 +334,23 @@ def call_groq(text: str) -> dict:
 # ---------------------------------------------------------------------------
 # Normalization helpers
 # ---------------------------------------------------------------------------
+
+# Exponent applied to each raw 0-100 score before normalizing. Values above 1
+# push strong emotions higher and weak ones lower (relative to each other)
+# before they're rescaled to sum to 100 - so whatever the AI feels most
+# strongly about ends up reading as clearly dominant instead of the result
+# looking like a flat, evenly-spread pie of similar percentages.
+SHARPEN_EXPONENT = 1.6
+
+
+def sharpen_scores(scores: dict, exponent: float = SHARPEN_EXPONENT) -> dict:
+    """
+    Exaggerate the gaps between strong and weak raw emotion scores so that,
+    once normalized, the leading feeling(s) come through as clearly dominant
+    rather than everything landing within a few percent of each other.
+    """
+    return {k: (max(0, v) ** exponent) for k, v in scores.items()}
+
 
 def normalize_scores(scores: dict) -> dict:
     """
@@ -312,8 +459,10 @@ def analyze_text(text: str) -> dict:
     if not raw_scores or max(raw_scores.values()) == 0:
         raw_scores = dict(FALLBACK_SCORES)
 
-    # Rescale so every response sums to exactly 100%.
-    scores = normalize_scores(raw_scores)
+    # Widen the gap between strong and weak emotions, then rescale so every
+    # response sums to exactly 100% - this makes the AI's dominant feeling(s)
+    # read as clearly dominant instead of everything looking evenly spread.
+    scores = normalize_scores(sharpen_scores(raw_scores))
 
     ranked = sorted(scores.items(), key=lambda kv: kv[1], reverse=True)
     primary_emotion, primary_score = ranked[0]
