@@ -27,42 +27,43 @@
     --bg-1:#4f46e5;
     --bg-2:#0ea5e9;
     --bg-3:#14b8a6;
-    --text-color:#1e1b2e;
-    --text-soft:rgba(30,27,46,.75);
-    --glass-bg:rgba(255,255,255,.55);
-    --glass-border:rgba(255,255,255,.7);
-    --glass-shadow:rgba(79,70,229,.18);
-    --track-bg:rgba(30,27,46,.12);
-    --history-bg:rgba(255,255,255,.5);
-    --reply-bg:rgba(255,255,255,.55);
-    --input-bg:rgba(255,255,255,.9);
-    --input-color:#1e1b2e;
+    --text-color:#ffffff;
+    --text-soft:rgba(255,255,255,.8);
+    --glass-bg:rgba(255,255,255,.15);
+    --glass-border:rgba(255,255,255,.2);
+    --glass-shadow:rgba(0,0,0,.2);
+    --track-bg:rgba(255,255,255,.25);
+    --history-bg:rgba(255,255,255,.1);
+    --reply-bg:rgba(255,255,255,.15);
+    --input-bg:#ffffff;
+    --input-color:#1a1a1a;
     --keyword-bg:#3b82f6;
     --keyword-color:#ffffff;
-    --btn-toggle-bg:#1e1b2e;
-    --btn-toggle-color:#ffffff;
-    --blob-opacity:.35;
+    --btn-toggle-bg:#ffffff;
+    --btn-toggle-color:#222222;
+    --blob-opacity:.2;
 }
 
+/*
+  Dark mode only needs to swap the background gradient to dark navy shades
+  (that's the part that was actually broken - the animated body::before
+  gradient kept showing the bright colors on top of body's own background)
+  and slightly deepen the glass panels for contrast. Text, buttons, keyword
+  pills, and the input box keep the same look they always had.
+*/
 [data-theme="dark"]{
-    --bg-1:#0b1220;
+    --bg-1:#0f172a;
     --bg-2:#111827;
-    --bg-3:#1e1b3a;
-    --text-color:#f1f5f9;
-    --text-soft:rgba(241,245,249,.75);
+    --bg-3:#1e293b;
     --glass-bg:rgba(255,255,255,.08);
-    --glass-border:rgba(255,255,255,.14);
-    --glass-shadow:rgba(0,0,0,.4);
+    --glass-border:rgba(255,255,255,.15);
+    --glass-shadow:rgba(0,0,0,.45);
     --track-bg:rgba(255,255,255,.15);
-    --history-bg:rgba(255,255,255,.06);
+    --history-bg:rgba(255,255,255,.07);
     --reply-bg:rgba(255,255,255,.08);
-    --input-bg:rgba(15,23,42,.6);
+    --input-bg:#1e293b;
     --input-color:#f1f5f9;
-    --keyword-bg:#3b82f6;
-    --keyword-color:#ffffff;
-    --btn-toggle-bg:#f1f5f9;
-    --btn-toggle-color:#111827;
-    --blob-opacity:.18;
+    --blob-opacity:.12;
 }
 
 body{
