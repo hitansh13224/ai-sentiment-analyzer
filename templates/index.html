@@ -16,11 +16,61 @@
     font-family:'Poppins',sans-serif;
 }
 
+/*
+  Theme system: every color that needs to change between light and dark
+  mode lives in a CSS variable on :root, switched by [data-theme="dark"].
+  Elements reference the variables instead of hardcoded colors, so toggling
+  the theme actually restyles the whole page (gradient, glass panels,
+  text, borders, inputs) instead of just the <body> background.
+*/
+:root{
+    --bg-1:#4f46e5;
+    --bg-2:#0ea5e9;
+    --bg-3:#14b8a6;
+    --text-color:#1e1b2e;
+    --text-soft:rgba(30,27,46,.75);
+    --glass-bg:rgba(255,255,255,.55);
+    --glass-border:rgba(255,255,255,.7);
+    --glass-shadow:rgba(79,70,229,.18);
+    --track-bg:rgba(30,27,46,.12);
+    --history-bg:rgba(255,255,255,.5);
+    --reply-bg:rgba(255,255,255,.55);
+    --input-bg:rgba(255,255,255,.9);
+    --input-color:#1e1b2e;
+    --keyword-bg:#3b82f6;
+    --keyword-color:#ffffff;
+    --btn-toggle-bg:#1e1b2e;
+    --btn-toggle-color:#ffffff;
+    --blob-opacity:.35;
+}
+
+[data-theme="dark"]{
+    --bg-1:#0b1220;
+    --bg-2:#111827;
+    --bg-3:#1e1b3a;
+    --text-color:#f1f5f9;
+    --text-soft:rgba(241,245,249,.75);
+    --glass-bg:rgba(255,255,255,.08);
+    --glass-border:rgba(255,255,255,.14);
+    --glass-shadow:rgba(0,0,0,.4);
+    --track-bg:rgba(255,255,255,.15);
+    --history-bg:rgba(255,255,255,.06);
+    --reply-bg:rgba(255,255,255,.08);
+    --input-bg:rgba(15,23,42,.6);
+    --input-color:#f1f5f9;
+    --keyword-bg:#3b82f6;
+    --keyword-color:#ffffff;
+    --btn-toggle-bg:#f1f5f9;
+    --btn-toggle-color:#111827;
+    --blob-opacity:.18;
+}
+
 body{
     min-height:100vh;
-    background:#4f46e5;
+    background:var(--bg-1);
     overflow-x:hidden;
-    color:white;
+    color:var(--text-color);
+    transition:color .3s;
 }
 
 /*
@@ -43,10 +93,11 @@ body::before{
     left:-25%;
     width:150%;
     height:150%;
-    background:linear-gradient(135deg,#4f46e5,#0ea5e9,#14b8a6);
+    background:linear-gradient(135deg,var(--bg-1),var(--bg-2),var(--bg-3));
     background-size:200% 200%;
     will-change:transform;
     animation:bgMove 18s ease-in-out infinite;
+    transition:background 1.2s ease;
     z-index:-2;
 }
 
@@ -69,7 +120,8 @@ body::before{
     position:absolute;
     border-radius:50%;
     backdrop-filter:blur(14px);
-    opacity:.2;
+    opacity:var(--blob-opacity);
+    transition:opacity .3s;
     will-change:transform;
     transform:translateZ(0);
 }
@@ -140,10 +192,10 @@ header h1{
     padding:12px 20px;
     border-radius:12px;
     cursor:pointer;
-    background:white;
-    color:#222;
+    background:var(--btn-toggle-bg);
+    color:var(--btn-toggle-color);
     font-weight:600;
-    transition:.3s;
+    transition:background .3s, color .3s, transform .3s;
 }
 
 #darkBtn:hover{
@@ -161,15 +213,19 @@ header h1{
 }
 
 .glass{
-    background:rgba(255,255,255,.15);
-    border:1px solid rgba(255,255,255,.2);
+    background:var(--glass-bg);
+    border:1px solid var(--glass-border);
     backdrop-filter:blur(10px);
     border-radius:20px;
     padding:25px;
-    box-shadow:0 10px 35px rgba(0,0,0,.2);
-    transition:transform .35s;
+    box-shadow:0 10px 35px var(--glass-shadow);
+    transition:transform .35s, background .3s, border-color .3s;
     transform:translateZ(0);
     contain:layout style paint;
+}
+
+.glass h2, .glass h3{
+    color:var(--text-color);
 }
 
 .glass:hover{
@@ -181,11 +237,18 @@ textarea{
     height:180px;
     margin-top:20px;
     resize:none;
-    border:none;
+    border:1px solid var(--glass-border);
     outline:none;
     border-radius:15px;
     padding:18px;
     font-size:17px;
+    background:var(--input-bg);
+    color:var(--input-color);
+    transition:background .3s, color .3s;
+}
+
+textarea::placeholder{
+    color:var(--text-soft);
 }
 
 button{
@@ -228,10 +291,11 @@ button:disabled{
 .progress{
     width:100%;
     height:14px;
-    background:rgba(255,255,255,.25);
+    background:var(--track-bg);
     border-radius:20px;
     overflow:hidden;
     margin-top:20px;
+    transition:background .3s;
 }
 
 .progress-fill{
@@ -290,9 +354,10 @@ button:disabled{
 .dominant-bar{
     width:100%;
     height:12px;
-    background:rgba(255,255,255,.25);
+    background:var(--track-bg);
     border-radius:20px;
     overflow:hidden;
+    transition:background .3s;
 }
 
 .dominant-bar-fill{
@@ -330,9 +395,10 @@ button:disabled{
 .polarity-bar{
     width:100%;
     height:14px;
-    background:rgba(255,255,255,.25);
+    background:var(--track-bg);
     border-radius:20px;
     overflow:hidden;
+    transition:background .3s;
 }
 
 .polarity-bar-fill{
@@ -364,15 +430,18 @@ button:disabled{
     border-radius:30px;
     margin:8px;
     font-weight:600;
-    background:#3b82f6;
+    background:var(--keyword-bg);
+    color:var(--keyword-color);
 }
 
 .replyBox{
     margin-top:20px;
     padding:18px;
     border-radius:15px;
-    background:rgba(255,255,255,.15);
+    background:var(--reply-bg);
     line-height:1.8;
+    color:var(--text-color);
+    transition:background .3s;
 }
 
 #history{
@@ -384,33 +453,43 @@ button:disabled{
     margin:12px 0;
     padding:12px;
     border-radius:12px;
-    background:rgba(255,255,255,.1);
+    background:var(--history-bg);
+    color:var(--text-color);
+    transition:background .3s;
 }
 
 #historyEmpty{
     margin-top:15px;
-    opacity:.7;
+    color:var(--text-soft);
 }
 
 .error-msg{
     margin-top:12px;
-    color:#fecaca;
+    color:#dc2626;
     font-weight:600;
+}
+
+[data-theme="dark"] .error-msg{
+    color:#fecaca;
 }
 
 .warning-msg{
     margin-top:12px;
-    color:#fde68a;
+    color:#b45309;
     font-weight:600;
 }
 
+[data-theme="dark"] .warning-msg{
+    color:#fde68a;
+}
+
 .placeholder-text{
-    opacity:.7;
+    color:var(--text-soft);
 }
 
 .char-counter{
     margin-top:10px;
-    opacity:0.8;
+    color:var(--text-soft);
     font-size:14px;
 }
 
@@ -418,7 +497,7 @@ footer{
     text-align:center;
     padding:35px;
     font-size:15px;
-    opacity:.8;
+    color:var(--text-soft);
 }
 
 @media(max-width:768px){
@@ -446,7 +525,7 @@ header h1{
 
 <header>
     <h1>🤖 AI Sentiment Analyzer</h1>
-    <button id="darkBtn">☀️ Light Mode</button>
+    <button id="darkBtn">🌙 Dark Mode</button>
 </header>
 
 <div class="container">
@@ -515,7 +594,7 @@ header h1{
 </div>
 
 <footer>
-    Made with ❤️ by Hitansh Reddy
+    AI Sentiment Analyzer Pro • Built for Hackathon 🚀
 </footer>
 
 <script>
@@ -697,21 +776,31 @@ function updateUI(data) {
     history.prepend(item);
 }
 
-let dark = false;
+function applyTheme(theme) {
+    document.documentElement.setAttribute("data-theme", theme);
+    darkBtn.innerHTML = theme === "dark" ? "☀️ Light Mode" : "🌙 Dark Mode";
+    try {
+        localStorage.setItem("sentimentAppTheme", theme);
+    } catch (e) {
+        // Storage not available (e.g. private browsing) - theme just won't persist.
+    }
+}
 
 darkBtn.addEventListener("click", () => {
-    dark = !dark;
-
-    if (dark) {
-        document.body.style.background = "#111827";
-        document.body.style.color = "white";
-        darkBtn.innerHTML = "☀️ Light Mode";
-    } else {
-        document.body.style.background = "linear-gradient(135deg,#4f46e5,#0ea5e9,#14b8a6)";
-        document.body.style.color = "white";
-        darkBtn.innerHTML = "☀️ Light Mode";
-    }
+    const current = document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
+    applyTheme(current === "dark" ? "light" : "dark");
 });
+
+(function initTheme() {
+    let saved = null;
+    try {
+        saved = localStorage.getItem("sentimentAppTheme");
+    } catch (e) {
+        saved = null;
+    }
+    const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    applyTheme(saved || (prefersDark ? "dark" : "light"));
+})();
 
 window.onload = () => {
     charCounter.innerHTML = "0/500 Characters";
