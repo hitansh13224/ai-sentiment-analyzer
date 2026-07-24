@@ -15,7 +15,7 @@ app = Flask(__name__)
 # Config
 # ---------------------------------------------------------------------------
 
-GROQ_API_KEY = "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"
+GROQ_API_KEY = "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"
 GROQ_MODEL = os.environ.get("GROQ_MODEL", "llama-3.3-70b-versatile")
 GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
 
